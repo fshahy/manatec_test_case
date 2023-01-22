@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="action_crm_checklist_template" model="ir.actions.act_window">
+        <field name="name">Checklist Template</field>
+        <field name="res_model">crm.checklist.template</field>
+        <field name="view_mode">tree,form</field>
+    </record> 
+
+    <record id="checklist_template_view_form" model="ir.ui.view">
+        <field name="name">crm.checklist.template.view.form</field>
+        <field name="model">crm.checklist.template</field>
+        <field name="arch" type="xml">
+            <form string="Checklist Template">
+                <sheet>
+                    <group>   
+                        <field name="name" />
+                        <field name="active" />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="checklist_template_view_tree" model="ir.ui.view">
+        <field name="name">crm.checklist.template.view.tree</field>
+        <field name="model">crm.checklist.template</field>
+        <field name="arch" type="xml">
+            <tree string="Checklist Template">
+                <field name="name" />
+                <field name="active" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="checklist_item_view_tree" model="ir.ui.view">
+        <field name="name">crm_checklist_item.view.tree</field>
+        <field name="model">crm.checklist.item</field>
+        <field name="arch" type="xml">
+            <tree string="Checklist Items" editable="bottom" create="false" delete="false">
+                <field name="done" />
+                <field name="checklist_template_id" readonly="1" options="{'no_quick_create':True,'no_create_edit':True,'no_open': True,}" />
+                <field name="lead_id" invisible="1" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="crm_lead_view_form" model="ir.ui.view">
+        <field name="name">crm.lead.view.form.inherit</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='extra']" position="after">
+                <page name="checklist" string="Checklist">
+                    <group>
+                        <field name="progress" widget="progressbar" />
+                        <field name="checklist_item_ids" />
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_crm_lead_kanban_inherit" model="ir.ui.view">
+        <field name="name">crm.lead.kanban.inherit</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.view_crm_lead_kanban"/>
+        <field name="arch" type="xml">
+            <xpath expr="//t[@t-name='kanban-box']/div/div[1]" position="after">
+                <div>
+                    <strong class="o_kanban_record_title">
+                        <span>Progress: <field name="progress"/>%</span>
+                    </strong>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="crm_case_tree_view_leads_inherit" model="ir.ui.view">
+        <field name="name">crm.lead.view.tree.inherit</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_case_tree_view_leads"/>
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="progress"/>
+            </field>
+        </field>
+    </record>
+
+</odoo>
